@@ -657,6 +657,7 @@ VideoJS.player.extend({
     this.currentTimeDisplay.setAttribute('role','timer');
     this.currentTimeDisplay.setAttribute('aria-controls',this.video.id);
     this.currentTimeDisplay.setAttribute('aria-label','CURRENT TIME');
+	this.currentTimeDisplay.setAttribute('aria-value',this.currentTime());
     this.currentTimeDisplay.setAttribute('aria-valuetext',_V_.formatTime(this.currentTime()));
 
     this.timeControl.appendChild(this.currentTimeDisplay);
@@ -671,6 +672,7 @@ VideoJS.player.extend({
     this.durationDisplay.setAttribute('role','timer');
     this.durationDisplay.setAttribute('aria-controls',this.video.id);
     this.durationDisplay.setAttribute('aria-label','TOTAL TIME');
+	this.durationDisplay.setAttribute('aria-value',this.duration());
     this.durationDisplay.setAttribute('aria-valuetext',_V_.formatTime(this.duration()));
 	
     this.timeControl.appendChild(this.durationDisplay);
@@ -1504,6 +1506,7 @@ VideoJS.player.newBehavior("currentTimeDisplay", function(element){
       var time = (newTime) ? newTime : this.currentTime();
       this.each(this.currentTimeDisplays, function(dis){
         dis.innerHTML = _V_.formatTime(time);
+		dis.setAttribute('aria-value', time);
 		dis.setAttribute('aria-valuetext', _V_.formatTime(time))
       });
     }
@@ -1522,9 +1525,11 @@ VideoJS.player.newBehavior("durationDisplay", function(element){
     updateDurationDisplays: function(){
       if (!this.durationDisplays) { return; }
       this.each(this.durationDisplays, function(dis){
-        if (this.duration()) { 
-			dis.innerHTML = _V_.formatTime(this.duration());
-			dis.setAttribute('aria-valuetext', _V_.formatTime(this.duration()));
+		var dur = this.duration();
+        if (dur) { 
+			dis.innerHTML = _V_.formatTime(dur);
+			dis.setAttribute('aria-value', dur);
+			dis.setAttribute('aria-valuetext', _V_.formatTime(dur));
 		}
       });
     }

@@ -1504,6 +1504,7 @@ VideoJS.player.newBehavior("currentTimeDisplay", function(element){
       var time = (newTime) ? newTime : this.currentTime();
       this.each(this.currentTimeDisplays, function(dis){
         dis.innerHTML = _V_.formatTime(time);
+		dis.setAttribute('aria-valuetext', _V_.formatTime(time))
       });
     }
   }
@@ -1521,7 +1522,10 @@ VideoJS.player.newBehavior("durationDisplay", function(element){
     updateDurationDisplays: function(){
       if (!this.durationDisplays) { return; }
       this.each(this.durationDisplays, function(dis){
-        if (this.duration()) { dis.innerHTML = _V_.formatTime(this.duration()); }
+        if (this.duration()) { 
+			dis.innerHTML = _V_.formatTime(this.duration());
+			dis.setAttribute('aria-valuetext', _V_.formatTime(this.duration()));
+		}
       });
     }
   }
@@ -1903,6 +1907,8 @@ VideoJS.extend({
 
   // Return seconds as MM:SS
   formatTime: function(secs) {
+	if(isNaN(secs))
+		secs = 0;
     var seconds = Math.round(secs);
     var minutes = Math.floor(seconds / 60);
     minutes = (minutes >= 10) ? minutes : "0" + minutes;
